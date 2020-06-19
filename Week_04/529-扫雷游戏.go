@@ -73,7 +73,12 @@ package main
 import "fmt"
 
 func main() {
-	board := [][]byte{{'B', '1', 'E', '1', 'B'}, {'B', '1', 'M', '1', 'B'}, {'B', '1', '1', '1', 'B'}, {'B', 'B', 'B', 'B', 'B'}}
+	board := [][]byte{
+		{'E', 'E', 'E', 'E', 'E'},
+		{'E', 'E', 'M', 'E', 'E'},
+		{'E', 'E', 'E', 'E', 'E'},
+		{'E', 'E', 'E', 'E', 'E'}}
+	//board := [][]byte{{'B', '1', 'E', '1', 'B'}, {'B', '1', 'M', '1', 'B'}, {'B', '1', '1', '1', 'B'}, {'B', 'B', 'B', 'B', 'B'}}
 	click := []int{3, 0}
 	res := updateBoard(board, click)
 	strs := make([][]string, len(res))
@@ -98,56 +103,56 @@ func main() {
 //leetcode submit region begin(Prohibit modification and deletion)
 func updateBoard(board [][]byte, click []int) [][]byte {
 	// DFS
-	row, col := len(board), len(board[0])
-	x, y := click[0], click[1]
-	if board[x][y] == 'M' {
-		board[x][y] = 'X'
-		return board
-	}
-	var dfs func(int, int)
-	dfs = func(i, j int) {
-		var mCount byte = '0'
-		for r := -1; r < 2; r++ {
-			for c := -1; c < 2; c++ {
-				if r|c == 0 {
-					continue
-				}
-				x, y := i+r, j+c
-				if row > x && x >= 0 && col > y && y >= 0 && board[x][y] == 'M' {
-					mCount++
-				}
-			}
-		}
-		if mCount > '0' {
-			board[i][j] = mCount
-		} else {
-			board[i][j] = 'B'
-			for r := -1; r < 2; r++ {
-				for c := -1; c < 2; c++ {
-					if r|c == 0 {
-						continue
-					}
-					x, y := i+r, j+c
-					if row > x && x >= 0 && col > y && y >= 0 && board[x][y] == 'E' {
-						dfs(x, y)
-					}
-				}
-			}
-		}
-	}
-	dfs(x, y)
-	return board
-
-	// DFS：个人写法
-	//row := len(board)
-	//col := len(board[0])
+	//row, col := len(board), len(board[0])
 	//x, y := click[0], click[1]
 	//if board[x][y] == 'M' {
 	//	board[x][y] = 'X'
 	//	return board
 	//}
-	//dfs(board, row, col, x, y)
+	//var dfs func(int, int)
+	//dfs = func(i, j int) {
+	//	var mCount byte = '0'
+	//	for r := -1; r < 2; r++ {
+	//		for c := -1; c < 2; c++ {
+	//			if r|c == 0 {
+	//				continue
+	//			}
+	//			x, y := i+r, j+c
+	//			if row > x && x >= 0 && col > y && y >= 0 && board[x][y] == 'M' {
+	//				mCount++
+	//			}
+	//		}
+	//	}
+	//	if mCount > '0' {
+	//		board[i][j] = mCount
+	//	} else {
+	//		board[i][j] = 'B'
+	//		for r := -1; r < 2; r++ {
+	//			for c := -1; c < 2; c++ {
+	//				if r|c == 0 {
+	//					continue
+	//				}
+	//				x, y := i+r, j+c
+	//				if row > x && x >= 0 && col > y && y >= 0 && board[x][y] == 'E' {
+	//					dfs(x, y)
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//dfs(x, y)
 	//return board
+
+	// DFS：个人写法：没跑通，必须先判断周围有几个炸弹
+	row := len(board)
+	col := len(board[0])
+	x, y := click[0], click[1]
+	if board[x][y] == 'M' {
+		board[x][y] = 'X'
+		return board
+	}
+	dfs(board, row, col, x, y)
+	return board
 }
 
 func dfs(board [][]byte, row int, col int, i int, j int) byte {

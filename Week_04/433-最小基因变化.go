@@ -54,11 +54,17 @@ import (
 )
 
 func main() {
-	start := "AACCGGTT"
-	end := "AAACGGTA"
-	bank := []string{"AACCGGTA", "AACCGCTA", "AAACGGTA"}
+	//start := "AACCGGTT"
+	//end := "AAACGGTA"
+	//bank := []string{"AACCGGTA", "AACCGCTA", "AAACGGTA"}
+	//start := "AACCGGTT"
+	//end := "AACCGGTA"
+	//bank := []string{}
+	start := "AAAAAAAA"
+	end := "CCCCCCCC"
+	bank := []string{"AAAAAAAA", "AAAAAAAC", "AAAAAACC", "AAAAACCC", "AAAACCCC", "AACACCCC", "ACCACCCC", "ACCCCCCC", "CCCCCCCA", "CCCCCCCC"}
 	mutation := minMutation(start, end, bank)
-	fmt.Println(mutation, "abckdjfk")
+	fmt.Println(mutation)
 }
 
 type Mutation struct {
@@ -76,23 +82,129 @@ type Mutation struct {
 */
 //leetcode submit region begin(Prohibit modification and deletion)
 func minMutation(start string, end string, bank []string) int {
-	// DFS：https://leetcode-cn.com/problems/minimum-genetic-mutation/solution/java-dfs-hui-su-by-1yx/
-
-	// BFS
-	visited := make([]bool, len(bank))
-	//visited := make(map[string]bool)
-	queue := []string{start}
-	level := 0
-	for len(queue) > 0 {
-		n := len(queue)
-		for i, curr := range queue {
-			if curr == end {
-				return level
-			}
-			queue = append(queue,)
+	// 双向BFS：双百
+	idx := -1
+	for i, b := range bank {
+		if end == b {
+			idx = i
+			break
 		}
-		queue = queue[n:]
 	}
+	if len(bank) == 0 || idx == -1 {
+		return -1
+	}
+	canMutation := func(curr, to string) bool {
+		count := 0
+		for i := 0; i < len(curr); i++ {
+			if curr[i] != to[i] {
+				if count == 1 {
+					return false
+				}
+				count++
+			}
+		}
+		return true
+	}
+	count := 0
+	mutation := func(queue *[]string, currV, otherV []bool) int {
+		n := len(*queue)
+		for i := 0; i < n; i++ {
+			curr := (*queue)[i]
+			for i, b := range bank {
+				if !currV[i] && canMutation(curr, b) {
+					if otherV[i] {
+						return 0
+					}
+					currV[i] = true
+					*queue = append(*queue, b)
+				}
+			}
+		}
+		*queue = (*queue)[n:]
+		return -1
+	}
+	qStart, sVisited, qEnd, eVisited := []string{start}, make([]bool, len(bank)), []string{end}, make([]bool, len(bank))
+	eVisited[idx] = true
+	for len(qStart) > 0 && len(qEnd) > 0 {
+		if can := mutation(&qStart, sVisited, eVisited); can == 0 {
+			return (count << 1) + 1
+		}
+		if can := mutation(&qEnd, eVisited, sVisited); can == 0 {
+			return (count << 1) + 2
+		}
+		count++
+	}
+	return -1
+
+	// BFS：双百
+	//canMutation := func(curr, to string) bool {
+	//	count := 0
+	//	for i := 0; i < len(curr); i++ {
+	//		if curr[i] != to[i] {
+	//			if count == 1 {
+	//				return false
+	//			}
+	//			count++
+	//		}
+	//	}
+	//	return true
+	//}
+	//used := make([]bool, len(bank))
+	//queue := []string{start}
+	//for i, min := 0, 1; len(queue) > i; min++ { // queue的新写法
+	//	n := len(queue)
+	//	for ; i < n; i++ {
+	//		curr := queue[i]
+	//		for i, mu := range bank {
+	//			if canMutation(curr, mu) && !used[i] {
+	//				if mu == end {
+	//					return min
+	//				}
+	//				used[i] = true
+	//				queue = append(queue, mu)
+	//			}
+	//		}
+	//	}
+	//}
+	//return -1
+
+	// DFS：双百
+	//minMutation := len(bank) + 1
+	//isUsed := make([]bool, len(bank))
+	//canMutation := func(curr, mu string) bool {
+	//	count := 0
+	//	for i, c := range curr {
+	//		if uint8(c) != mu[i] {
+	//			if count == 1 {
+	//				return false
+	//			}
+	//			count++
+	//		}
+	//	}
+	//	return true
+	//}
+	//var dfs func(curr string, level int, used []bool)
+	//dfs = func(curr string, level int, used []bool) {
+	//	for i, muTo := range bank {
+	//		if used[i] || !canMutation(curr, muTo) {
+	//			continue
+	//		}
+	//		if muTo == end {
+	//			if level+1 < minMutation {
+	//				minMutation = level + 1
+	//			}
+	//			return
+	//		}
+	//		used[i] = true
+	//		dfs(muTo, level+1, used)
+	//		used[i] = false
+	//	}
+	//}
+	//dfs(start, 0, isUsed)
+	//if minMutation <= len(bank) {
+	//	return minMutation
+	//}
+	//return -1
 
 	// 个人写法：BFS+hash
 	//memo := make(map[string]bool)
@@ -126,12 +238,6 @@ func minMutation(start string, end string, bank []string) int {
 	//	}
 	//}
 	//return -1
-
-	// 建立树状结构：麻烦，没写完
-	//root := &Mutation{[]uint8(start), nil}
-	//for _, mu := range bank {
-	//	count := getDiff(start, mu)
-	//}
 }
 
 func getDiff(tar string, another string) int {
