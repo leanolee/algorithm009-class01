@@ -35,12 +35,51 @@
 // Related Topics 回溯算法
 package main
 
+import "fmt"
+
 func main() {
-	
+	n := 4
+	queens := totalNQueens(n)
+	fmt.Println(queens)
 }
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func totalNQueens(n int) int {
+	// 位运算：
+	return totalNQueensDFS(n, 0, 0, 0, 0)
 
+	// dfs：
+	//pie, na, c := make([]bool, n<<1-1), make([]bool, n<<1-1), make([]bool, n)
+	//return totalNQueensDfs(n, 0, pie, na, c)
 }
+
+func totalNQueensDFS(n int, i int, pie, na, c int) int {
+	if i == n {
+		return 1
+	}
+	bits, ans := ^(pie|na|c)&(1<<n-1), 0
+	for bits > 0 {
+		last := bits & -bits
+		ans += totalNQueensDFS(n, i+1, (pie|last)<<1, (na|last)>>1, c|last)
+		bits ^= last
+	}
+	return ans
+}
+
+func totalNQueensDfs(n int, i int, pie []bool, na []bool, c []bool) int {
+	if i == n {
+		return 1
+	}
+	ans := 0
+	for j := 0; j < n; j++ {
+		if pie[i+j] || na[n-i-1+j] || c[j] {
+			continue
+		}
+		pie[i+j], na[n-i-1+j], c[j] = true, true, true
+		ans += totalNQueensDfs(n, i+1, pie, na, c)
+		pie[i+j], na[n-i-1+j], c[j] = false, false, false
+	}
+	return ans
+}
+
 //leetcode submit region end(Prohibit modification and deletion)

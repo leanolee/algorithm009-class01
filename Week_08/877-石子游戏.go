@@ -37,45 +37,61 @@ package main
 import "fmt"
 
 func main() {
-	piles := []int{5, 3, 4, 5}
+	piles := []int{3, 9, 1, 2}
 	game := stoneGame(piles)
 	fmt.Println(game)
 }
 
+/*
+博弈DP：https://leetcode-cn.com/problems/stone-game/solution/jie-jue-bo-yi-wen-ti-de-dong-tai-gui-hua-tong-yong/
+*/
 //leetcode submit region begin(Prohibit modification and deletion)
 func stoneGame(piles []int) bool {
-	// 数学
-	return true
+	// 数学：关键，piles.length 是偶数
+	//return true
 
-	// 动态规划
-	max := func(a, b int) int {
-		if a > b {
-			return a
-		}
-		return b
-	}
-	min := func(a, b int) int {
-		if a < b {
-			return a
-		}
-		return b
-	}
+	// dp：
 	n := len(piles)
-	dp := make([][]int, n+2)
-	for i := 0; i <= n+1; i++ {
-		dp[i] = make([]int, n+2)
+	dp := make([][][2]int, n)
+	for i := 0; i < n; i++ {
+		dp[i] = make([][2]int, n)
 	}
-	for size := 1; size <= n; size++ { // size
-		for i := 0; i+size <= n; i++ {
-			j := i + size - 1
-			if (j-i+1)&1 == 1 { // 奇数
-				dp[i+1][j+1] = min(dp[i+2][j]-piles[i], dp[i+1][j]-piles[j])
-			} else { // 偶数
-				dp[i+1][j+1] = max(dp[i+2][j]+piles[i], dp[i+1][j]+piles[j])
+	for i := n - 1; i >= 0; i-- { // 倒着遍历半个矩阵
+		dp[i][i][0] = piles[i]       // 默认不管是奇数还是偶数个，第一个人先选
+		for j := i + 1; j < n; j++ { // i+1
+			/*
+				dp[i][j].fir = max(piles[i] + dp[i+1][j].sec, piles[j] + dp[i][j-1].sec)
+				dp[i][j].fir = max(    选择最左边的石头堆     ,     选择最右边的石头堆     )
+				if 先手选择左边:
+				    dp[i][j].sec = dp[i+1][j].fir
+				if 先手选择右边:
+				    dp[i][j].sec = dp[i][j-1].fir
+			*/
+			l, r := piles[i]+dp[i+1][j][1], piles[j]+dp[i][j-1][1]
+			if l < r {
+				dp[i][j][0], dp[i][j][1] = r, dp[i][j-1][0]
+			} else {
+				dp[i][j][0], dp[i][j][1] = l, dp[i+1][j][0]
 			}
 		}
 	}
-	return dp[1][n] > 0
+	return dp[0][n-1][0] > dp[0][n-1][1]
+
+	//dp := make([][]int, n+2)
+	//for i := 0; i <= n+1; i++ {
+	//	dp[i] = make([]int, n+2)
+	//}
+	//for size := 1; size <= n; size++ { // size
+	//	for i := 0; i+size <= n; i++ {
+	//		j := i + size - 1
+	//		if (j-i+1)&1 == 1 { // 奇数：轮到第二人取，直接减去第 1 人的数
+	//			dp[i+1][j+1] = min(dp[i+2][j]-piles[i], dp[i+1][j]-piles[j])
+	//		} else { // 偶数
+	//			dp[i+1][j+1] = max(dp[i+2][j]+piles[i], dp[i+1][j]+piles[j])
+	//		}
+	//	}
+	//}
+	//return dp[1][n] > 0
 }
 
 //leetcode submit region end(Prohibit modification and deletion)

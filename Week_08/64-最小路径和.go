@@ -16,15 +16,41 @@
 // Related Topics 数组 动态规划
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+)
 
 func main() {
-	fmt.Println(1 >> 32)
+	grid := [][]int{
+		{1, 3, 1},
+		{1, 5, 1},
+		{4, 2, 1}}
+	sum := minPathSum(grid)
+	fmt.Println(sum)
 }
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func minPathSum(grid [][]int) int {
-	return 0
+	// dp：
+	min := func(a, b int) int {
+		if a < b {
+			return a
+		}
+		return b
+	}
+	m, n := len(grid), len(grid[0])
+	dp := make([]int, n+1)
+	for j := 1; j <= n; j++ {
+		dp[j] = grid[0][j-1] + dp[j-1]
+	}
+	dp[0] = math.MaxInt64
+	for i := 1; i < m; i++ {
+		for j := 1; j <= n; j++ {
+			dp[j] = grid[i][j-1] + min(dp[j-1], dp[j])
+		}
+	}
+	return dp[n]
 }
 
 //leetcode submit region end(Prohibit modification and deletion)

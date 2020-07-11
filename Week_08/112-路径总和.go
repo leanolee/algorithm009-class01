@@ -35,6 +35,11 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+/*
+变种：
+	1.任意位置终止
+	2.任意位置开始，任意位置终止
+*/
 //leetcode submit region begin(Prohibit modification and deletion)
 /**
  * Definition for a binary tree node.
@@ -45,6 +50,27 @@ type TreeNode struct {
  * }
  */
 func hasPathSum(root *TreeNode, sum int) bool {
+	// 变种 2：
+	return recursion(root, sum, sum)
+
+	// 变种 2：错误
+	//if root == nil {
+	//	return false
+	//}
+	//if sum == root.Val {
+	//	return true
+	//}
+	//return hasPathSum(root.Left, sum-root.Val) || hasPathSum(root.Right, sum-root.Val) || hasPathSum(root.Left, sum) || hasPathSum(root.Right, sum)
+
+	// 变种 1
+	//if root == nil {
+	//	return false
+	//}
+	//if sum == root.Val {
+	//	return true
+	//}
+	//return hasPathSum(root.Left, sum-root.Val) || hasPathSum(root.Right, sum-root.Val)
+
 	// BFS：
 	//if root == nil {
 	//	return false
@@ -74,13 +100,22 @@ func hasPathSum(root *TreeNode, sum int) bool {
 	//return false
 
 	// DFS
+	//if root == nil {
+	//	return false
+	//}
+	//if root.Left == nil && root.Right == nil {
+	//	return root.Val == sum
+	//}
+	//return hasPathSum(root.Left, sum-root.Val) || hasPathSum(root.Right, sum-root.Val)
+}
+func recursion(root *TreeNode, sum int, curr int) bool {
 	if root == nil {
 		return false
 	}
-	if root.Left == nil && root.Right == nil {
-		return root.Val == sum
+	if curr == root.Val {
+		return true
 	}
-	return hasPathSum(root.Left, sum-root.Val) || hasPathSum(root.Right, sum-root.Val)
+	return recursion(root.Left, sum, curr-root.Val) || recursion(root.Right, sum, curr-root.Val) || recursion(root.Left, sum, sum) || recursion(root.Right, sum, sum)
 }
 
 //leetcode submit region end(Prohibit modification and deletion)

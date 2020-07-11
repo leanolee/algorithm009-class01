@@ -37,12 +37,25 @@
 // Related Topics 数组 动态规划
 package main
 
+import "fmt"
+
 func main() {
-	
+	m, n := 3, 2
+	paths := uniquePaths(m, n)
+	fmt.Println(paths)
 }
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func uniquePaths(m int, n int) int {
-
+	// dp：
+	dp := make([]int, n)
+	dp[0] = 1
+	for i := 0; i < m; i++ {
+		for j := 1; j < n; j++ {
+			dp[j] += dp[j-1]
+		}
+	}
+	return dp[n-1]
 }
+
 //leetcode submit region end(Prohibit modification and deletion)

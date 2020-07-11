@@ -25,21 +25,38 @@ func main() {
 	fmt.Println(number2)
 }
 
+/*
+异或：https://leetcode-cn.com/problems/single-number-ii/solution/zhi-chu-xian-yi-ci-de-shu-zi-ii-by-leetcode/
+	1.bit 出现 1 次数：
+		奇数：1
+		偶数：0
+	2.位掩码 seen_once 仅保留出现一次的数字，不保留出现三次的数字
+		seen_once = ~seen_twice & (seen_once ^ num)
+		seen_twice = ~seen_once & (seen_twice ^ num)
+*/
 //leetcode submit region begin(Prohibit modification and deletion)
 func singleNumber2(nums []int) int {
-	// hash：3×(a+b+c)−(a+a+a+b+b+b+c)=2c
-	memo := make(map[int]int)
+	// 位运算
+	once, twice := 0, 0
 	for _, n := range nums {
-		if memo[n] == 2 {
-			delete(memo, n)
-		} else {
-			memo[n]++
-		}
+		once = ^twice & (once ^ n)
+		twice = ^once & (twice ^ n)
 	}
-	for k, _ := range memo {
-		return k
-	}
-	return 0
+	return once
+
+	// hash：3×(a+b+c)−(a+a+a+b+b+b+c)=2c
+	//memo := make(map[int]int)
+	//for _, n := range nums {
+	//	if memo[n] == 2 {
+	//		delete(memo, n)
+	//	} else {
+	//		memo[n]++
+	//	}
+	//}
+	//for k, _ := range memo {
+	//	return k
+	//}
+	//return 0
 }
 
 //leetcode submit region end(Prohibit modification and deletion)

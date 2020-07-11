@@ -24,12 +24,18 @@ func main() {
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func singleNumber3(nums []int) []int {
-	ans := 0
+	// 位运算
+	xor1, xor2 := 0, 0
 	for _, n := range nums {
-		ans ^= n
+		xor1 ^= n // 取得两数的异或值
 	}
-	fmt.Println(ans)
-	return nil
+	last := xor1 & -xor1
+	for _, n := range nums {
+		if last&n == 0 {
+			xor2 ^= n // 取得第2个值
+		}
+	}
+	return []int{xor1 ^ xor2, xor2} // 取得第1个值
 }
 
 //leetcode submit region end(Prohibit modification and deletion)
