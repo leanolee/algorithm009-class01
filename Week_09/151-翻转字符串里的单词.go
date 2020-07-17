@@ -40,7 +40,10 @@
 // Related Topics 字符串
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 func main() {
 	s := "a good   example"
@@ -50,6 +53,35 @@ func main() {
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func reverseWords(s string) string {
+	// 个人写法二
+	if len(s) == 0 {
+		return s
+	}
+	l, r := 0, len(s)-1
+	for ; l <= r; l++ { // 去头
+		if s[l] != 32 {
+			break
+		}
+	}
+	strs, i := make([]string, 0), l
+	for ; l <= r; l++ { // 分割
+		if s[l] == 32 && s[l-1] != 32 {
+			strs = append(strs, s[i:l])
+			for l <= r && s[l] == 32 {
+				l++
+			}
+			i = l
+		}
+	}
+	if s[r] != 32 {
+		strs = append(strs, s[i:l])
+	}
+	for i, j := 0, len(strs)-1; i < j; i, j = i+1, j-1 { // 反转
+		strs[i], strs[j] = strs[j], strs[i]
+	}
+	join := strings.Join(strs, " ") // 拼接
+	return join
+
 	// 个人写法
 	cache, e := make([]uint8, 0), 0
 	for e < len(s) && s[e] == 32 {
