@@ -23,12 +23,63 @@
 // Related Topics 双指针 字符串
 package main
 
+import "fmt"
+
 func main() {
-	
+	haystack := "hello"
+	needle := "ll"
+	str := strStr(haystack, needle)
+	fmt.Println(str)
 }
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func strStr(haystack string, needle string) int {
+	// Boyer-Moore匹配算法
 
+	// Rabin-Karp匹配算法
+
+	// KMP匹配算法
+
+	// Sunday匹配算法
+	m, n := len(haystack), len(needle)
+	badChar := sundayHelper(needle)
+	for i, j := 0, 0; i <= m-n; {
+		j = 0
+		for j < n && haystack[i+j] == needle[j] {
+			j++
+		}
+		if j == n {
+			return i
+		}
+		if i+n == m {
+			break
+		}
+		i += badChar[haystack[i+n]]
+	}
+	return -1
+
+	// 后缀蛮力匹配算法
+	//m, n := len(haystack), len(needle)
+	//for i, j := 0, 0; i <= m-n; i++ {
+	//	for j = n - 1; j >= 0 && haystack[i+j] == needle[j]; {
+	//		j--
+	//	}
+	//	if j == -1 {
+	//		return i
+	//	}
+	//}
+	//return -1
 }
+
+func sundayHelper(p string) [256]int {
+	badChar, n := [256]int{}, len(p)
+	for i := range badChar {
+		badChar[i] = n + 1
+	}
+	for i, c := range p {
+		badChar[c] = n - i
+	}
+	return badChar
+}
+
 //leetcode submit region end(Prohibit modification and deletion)
