@@ -12,12 +12,52 @@
 // Related Topics 位运算 哈希表
 package main
 
+import "fmt"
+
 func main() {
-	
+	s := "AAAAACCCCCAAAAACCCCCCAAAAAGGGTTT"
+	sequences := findRepeatedDnaSequences(s)
+	fmt.Println(sequences)
 }
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func findRepeatedDnaSequences(s string) []string {
+	// 位运算
 
+	// Rabin-Karp
+	hash, base, dna, n := uint32(0), uint32(29), 10, len(s)
+	if n < dna {
+		return nil
+	}
+	pow, memo, cache, ans := getPow(base, dna), make(map[uint32]bool), make(map[string]bool), make([]string, 0)
+	for i := 0; i < dna; i++ {
+		hash = hash*base + uint32(s[i])
+	}
+	memo[hash] = true
+	for i := dna; i < n; i++ {
+		hash = hash*base + uint32(s[i])
+		hash -= pow * uint32(s[i-dna]) // 后减：getPow(base, dna)；先减：getPow(base, dna-1)
+		if memo[hash] {                // 还要再判断字符串是否相等
+			cache[s[i-dna+1:i+1]] = true
+			//ans = append(ans, s[i-dna+1:i+1])
+		} else {
+			memo[hash] = true
+		}
+	}
+	for k, _ := range cache {
+		ans = append(ans, k)
+	}
+	return ans
 }
+func getPow(x uint32, n int) uint32 {
+	var ans uint32 = 1
+	for ; n > 0; n >>= 1 {
+		if n&1 == 1 {
+			ans *= x
+		}
+		x *= x
+	}
+	return ans
+}
+
 //leetcode submit region end(Prohibit modification and deletion)

@@ -40,12 +40,70 @@
 // Related Topics 哈希表
 package main
 
+import "fmt"
+
 func main() {
-	
+	//s := "cbaebabacd"
+	//p := "abc"
+	s := "abab"
+	p := "ab"
+	anagrams := findAnagrams(s, p)
+	fmt.Println(anagrams)
 }
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func findAnagrams(s string, p string) []int {
+	// [26]字符：双指针
+	ans, cache, curr, n := make([]int, 0), [26]int{}, [26]int{}, len(p)-1
+	for _, c := range p {
+		cache[c-'a']++
+	}
+	for l, r := 0, 0; r < len(s); r++ {
+		idx := s[r] - 'a'
+		curr[idx]++
+		for ; curr[idx] > cache[idx]; l++ {
+			curr[s[l]-'a']--
+		}
+		if r-l == n {
+			ans = append(ans, l)
+		}
+	}
+	return ans
 
+	// [26]字符：队列
+	//ans, cache, curr, count, n := make([]int, 0), [26]int{}, [26]int{}, 26, len(p)
+	//for _, c := range p {
+	//	idx := c - 'a'
+	//	if cache[idx] == 0 {
+	//		count--
+	//	}
+	//	cache[idx]++
+	//}
+	//for i, c := range s {
+	//	in := c - 'a'
+	//	if curr[in] == cache[in] {
+	//		count--
+	//	} else if curr[in] == cache[in]-1 {
+	//		count++
+	//	}
+	//	curr[in]++
+	//	if i >= n {
+	//		out := s[i-n] - 'a'
+	//		if curr[out] == cache[out] {
+	//			count--
+	//		} else if curr[out] == cache[out]+1 {
+	//			count++
+	//		}
+	//		curr[out]--
+	//	}
+	//	if count == 26 {
+	//		ans = append(ans, i-n+1)
+	//	}
+	//	//fmt.Printf("%c %d\n", c, count)
+	//}
+	//return ans
+
+	// hash + 排序
 }
+
 //leetcode submit region end(Prohibit modification and deletion)

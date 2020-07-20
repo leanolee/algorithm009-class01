@@ -34,12 +34,51 @@
 // Related Topics 字符串 动态规划
 package main
 
+import "fmt"
+
 func main() {
-	
+	word1 := "intention"
+	word2 := "execution"
+	distance := minDistance(word1, word2)
+	fmt.Println(distance)
 }
 
+/*
+dp：
+	w1[i] == w2[j]
+		dp[i][j] = dp[i-1][j-1]
+	else
+		dp[i][j] = min(dp[i-1][j-1], dp[i-1][j], dp[i][j-1]) + 1
+*/
 //leetcode submit region begin(Prohibit modification and deletion)
 func minDistance(word1 string, word2 string) int {
-
+	// dp：
+	min := func(a, b int) int {
+		if a < b {
+			return a
+		}
+		return b
+	}
+	m, n := len(word1), len(word2)
+	dp := make([][]int, m+1)
+	for i := 0; i <= m; i++ {
+		dp[i] = make([]int, n+1)
+		dp[i][0] = i
+	}
+	for j := 1; j <= n; j++ {
+		dp[0][j] = j
+	}
+	for i := 1; i <= m; i++ {
+		for j := 1; j <= n; j++ {
+			if word1[i-1] == word2[j-1] {
+				dp[i][j] = dp[i-1][j-1]
+			} else {
+				dp[i][j] = min(dp[i-1][j-1], min(dp[i-1][j], dp[i][j-1])) + 1
+			}
+		}
+	}
+	fmt.Println(dp)
+	return dp[m][n]
 }
+
 //leetcode submit region end(Prohibit modification and deletion)

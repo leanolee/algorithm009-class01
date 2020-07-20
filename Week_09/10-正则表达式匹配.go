@@ -72,7 +72,7 @@ https://leetcode-cn.com/problems/regular-expression-matching/solution/ji-yu-guan
 递归：
 
 dp：
-	p[j]=='*
+	p[j]=='*'
 		取 0 个 p[j-1]*
 			dp[i][j]=dp[i][j-2]
 		取 1/多 个 p[j-1]*

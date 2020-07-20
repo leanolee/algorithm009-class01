@@ -55,7 +55,7 @@ func intersect(nums1 []int, nums2 []int) []int {
 	}
 	return ans
 
-	// 排序
+	// 排序：然后二分
 }
 
 //leetcode submit region end(Prohibit modification and deletion)

@@ -19,12 +19,19 @@
 // Related Topics 双指针 字符串
 package main
 
+import "fmt"
+
 func main() {
-	
+	s := []byte{'h', 'e', 'l', 'l', 'o'}
+	reverseString(s)
+	fmt.Println(s)
 }
 
 //leetcode submit region begin(Prohibit modification and deletion)
-func reverseString(s []byte)  {
-
+func reverseString(s []byte) {
+	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
+		s[i], s[j] = s[j], s[i]
+	}
 }
+
 //leetcode submit region end(Prohibit modification and deletion)

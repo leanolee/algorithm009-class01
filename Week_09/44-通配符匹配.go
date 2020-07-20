@@ -57,12 +57,74 @@
 // Related Topics 贪心算法 字符串 动态规划 回溯算法
 package main
 
+import "fmt"
+
 func main() {
-	
+	s := "adceb"
+	p := "*a*b"
+	match := isMatch(s, p)
+	fmt.Println(match)
 }
 
 //leetcode submit region begin(Prohibit modification and deletion)
 func isMatch(s string, p string) bool {
+	// 贪心：暂时没写
 
+	// dp优化：一旦 p[j] = '*' 为true，则后面都从 j+1 开始遍历
+	m, n := len(s), len(p)
+	dp, preCol := make([][]bool, m+1), make([]bool, n+1)
+	for i := 0; i <= m; i++ {
+		dp[i] = make([]bool, n+1)
+	}
+	dp[0][0], preCol[0] = true, true
+	for j := 1; j <= n; j++ {
+		dp[0][j] = p[j-1] == '*' && dp[0][j-1]
+		preCol[j] = dp[0][j]
+	}
+	currCol := 1
+	for i := 1; i <= m; i++ {
+		for j := currCol; j <= n; j++ {
+			if s[i-1] == p[j-1] || p[j-1] == '?' {
+				dp[i][j] = dp[i-1][j-1]
+			} else if p[j-1] == '*' {
+				dp[i][j] = preCol[j-1]
+				if dp[i][j]{
+					currCol = j
+				}
+			}
+			if dp[i][j] {
+				preCol[j] = true
+			}
+		}
+	}
+	return dp[m][n]
+
+	// dp
+	//m, n := len(s), len(p)
+	//dp, preCol := make([][]bool, m+1), make([]bool, n+1)
+	//for i := 0; i <= m; i++ {
+	//	dp[i] = make([]bool, n+1)
+	//}
+	//dp[0][0], preCol[0] = true, true
+	//for j := 1; j <= n; j++ {
+	//	dp[0][j] = p[j-1] == '*' && dp[0][j-1]
+	//	preCol[j] = dp[0][j]
+	//}
+	//for i := 1; i <= m; i++ {
+	//	for j := 1; j <= n; j++ {
+	//		if s[i-1] == p[j-1] || p[j-1] == '?' {
+	//			dp[i][j] = dp[i-1][j-1]
+	//		} else if p[j-1] == '*' {
+	//			dp[i][j] = preCol[j-1]
+	//		}
+	//		if dp[i][j] {
+	//			preCol[j] = true
+	//		}
+	//	}
+	//}
+	//return dp[m][n]
+
+	// dfs
 }
+
 //leetcode submit region end(Prohibit modification and deletion)

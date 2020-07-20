@@ -86,7 +86,6 @@ func isInterleave(s1 string, s2 string, s3 string) bool {
 		for j := 1; j <= n; j++ {
 			dp[j] = i > 0 && s1[i-1] == s3[i+j-1] && dp[j] || s2[j-1] == s3[i+j-1] && dp[j-1]
 		}
-		fmt.Println(dp)
 	}
 	return dp[n]
 
