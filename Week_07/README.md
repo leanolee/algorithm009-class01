@@ -47,19 +47,21 @@
 ```go
 // Go
 func twoEndedBFS(graph, head, tail) {
-    begin, end, visited := map[], map[], map[]
-    begin[head], end[tail]
-    for len(begin)>0 && len(end)>0 {
-        temp := map[]
-        for k, _ := range begin {
-            visited[k]
+    begin, end, beginVisited, endVisited := slice[]{head}, slice[]{tail}, map[]{head}, map[]{tail}
+    for len(begin) > 0 {
+        temp := slice[]{head}
+        for k, node := range begin {
+            if beginVisited[k] {
+                continue
+            }
+            beginVisited[k]
             process(k)
             nodes = generate_related_nodes(node)
             temp[nodes...]
         }
         begin = temp
         if len(begin) > len(end) {
-        	begin, end = end, begin
+            begin, end, beginVisited, endVisited = end, begin, endVisited, beginVisited
     	}
     }
 }
