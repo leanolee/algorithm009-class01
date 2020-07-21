@@ -16,4 +16,4 @@
 
 #### Boyer-Moore算法及代码解析
 
-[https://github.com/leanolee/algorithm009-class01/blob/master/Week_09/Boyer-Moore%E5%8F%8A%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90.md](https://github.com/leanolee/algorithm009-class01/blob/master/Week_09/Boyer-Moore及代码解析.md)
+[https://github.com/leanolee/algorithm009-class01/blob/master/Week_09/Boyer-Moore%E7%AE%97%E6%B3%95%E5%8F%8A%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90.md](https://github.com/leanolee/algorithm009-class01/blob/master/Week_09/Boyer-Moore算法及代码解析.md)
