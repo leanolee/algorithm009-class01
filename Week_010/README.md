@@ -413,7 +413,7 @@
 
 #### 字符串算法
 
-> 详细参考：
+> 详细参考：[https://github.com/leanolee/algorithm009-class01/blob/master/Week_010/%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E7%AE%97%E6%B3%95%E5%90%88%E9%9B%86.md](https://github.com/leanolee/algorithm009-class01/blob/master/Week_010/字符串匹配算法合集.md)
 
 1. bruteForce：蛮力匹配
 
